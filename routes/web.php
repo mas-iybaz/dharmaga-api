@@ -19,3 +19,4 @@ $router->get('/users', 'UserController@index');
 $router->get('/user/{id}', 'UserController@show');
 $router->post('/user', 'UserController@store');
 $router->put('/user/{id}', 'UserController@update');
+$router->delete('/user/{id}', 'UserController@destroy');

@@ -96,4 +96,17 @@ class UserController extends Controller
             'message' => 'SUCCESS'
         ], 200);
     }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+
+        unlink(base_path('public/images/' . $user->photo));
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'SUCCESS'
+        ], 200);
+    }
 }
