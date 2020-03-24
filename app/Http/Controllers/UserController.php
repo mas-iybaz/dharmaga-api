@@ -66,4 +66,34 @@ class UserController extends Controller
             'message' => 'SUCCESS',
         ], 200);
     }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $filename = $user->photo;
+
+        if ($request->hasFile('photo')) {
+            $filename = Str::random(5) . $request->email . '.jpg';
+            $file = $request->file('photo');
+            $file->move(base_path('public/images/'), $filename);
+
+            unlink(base_path('public/images/' . $user->photo));
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'identity_id' => $request->identity_id,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'photo' => $filename,
+            'phone_number' => $request->phone_number,
+            'role' => $request->role,
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'message' => 'SUCCESS'
+        ], 200);
+    }
 }
