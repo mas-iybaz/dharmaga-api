@@ -29,6 +29,16 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        return response()->json([
+            'message' => 'SUCCESS',
+            'data' => $user
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $filename = null;
