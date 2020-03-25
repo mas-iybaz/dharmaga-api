@@ -20,3 +20,5 @@ $router->get('/user/{id}', 'UserController@show');
 $router->post('/user', 'UserController@store');
 $router->put('/user/{id}', 'UserController@update');
 $router->delete('/user/{id}', 'UserController@destroy');
+
+$router->post('/auth/login', 'AuthController@login');
