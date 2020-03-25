@@ -42,6 +42,19 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string|max:50',
+            'identity_id' => 'required|string|unique:users',
+            'gender' => 'required',
+            'address' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'phone_number' => 'required|string',
+            'role' => 'required',
+            'status' => 'required'
+        ]);
+
         $filename = null;
 
         if ($request->hasFile('photo')) {
@@ -70,6 +83,17 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required|string|max:50',
+            'identity_id' => 'required|string|unique:users',
+            'gender' => 'required',
+            'address' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png',
+            'phone_number' => 'required|string',
+            'role' => 'required',
+            'status' => 'required'
+        ]);
+
         $user = User::find($id);
 
         $filename = $user->photo;
