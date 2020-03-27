@@ -16,9 +16,11 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/users', 'UserController@index');
+$router->get('/user/login', 'UserController@getuserLogin');
 $router->get('/user/{id}', 'UserController@show');
 $router->post('/user', 'UserController@store');
 $router->put('/user/{id}', 'UserController@update');
 $router->delete('/user/{id}', 'UserController@destroy');
 
 $router->post('/auth/login', 'AuthController@login');
+$router->post('/auth/logout', 'AuthController@logout');

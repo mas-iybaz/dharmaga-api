@@ -16,13 +16,15 @@ class UserController extends Controller
     public function __construct()
     {
         //
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => 'store']);
     }
 
     //
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        $users = User::orderBy('created_at', 'desc')->when($request->q, function ($users) use ($request) {
+            $users = $users->where('name', 'LIKE', '%' . $request->q . '%');
+        })->paginate(5);
 
         return response()->json([
             'status' => 'SUCCESS',
@@ -126,12 +128,22 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        unlink(base_path('public/images/' . $user->photo));
+        if ($user->photo) {
+            unlink(base_path('public/images/' . $user->photo));
+        }
 
         $user->delete();
 
         return response()->json([
             'message' => 'SUCCESS'
         ], 200);
+    }
+
+    public function getUserLogin(Request $request)
+    {
+        return response()->json([
+            'status' => 'SUCCESS',
+            'data' => $request->user()
+        ]);
     }
 }

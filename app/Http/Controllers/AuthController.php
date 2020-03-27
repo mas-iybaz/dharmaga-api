@@ -36,14 +36,21 @@ class AuthController extends Controller
             ], 404);
         } else {
             if (Hash::check($request->password, $user->password)) {
-                $api_token = Str::random(16);
+                $api_token = Str::random(32);
+                $update_token = $user->update(['api_token' => $api_token]);
 
-                $user->update(['api_token' => $api_token]);
-
-                return response()->json([
-                    'status' => 'SUCCESS',
-                    'api_token' => $api_token
-                ], 200);
+                if ($update_token) {
+                    return response()->json([
+                        'status' => 'SUCCESS',
+                        'api_token' => $api_token,
+                        'data' => $user
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 'FAILED',
+                        'message' => 'Failed to get API token'
+                    ], 401);
+                }
             } else {
                 return response()->json([
                     'status' => 'FAILED',
@@ -51,5 +58,16 @@ class AuthController extends Controller
                 ], 401);
             }
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        $user->update(['api_token' => null]);
+
+        return response()->json([
+            'status' => 'SUCCESS'
+        ], 200);
     }
 }
